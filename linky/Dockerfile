@@ -5,8 +5,10 @@ ENV PYTHONDONTWRITEBYTECODE=1
 ENV PYTHONUNBUFFERED=1
 ENV PATH="/app/venv/bin:$PATH"
 
+# use /app generic folder
 WORKDIR /app
 
+# use python venv to bring in any necessary packages
 RUN python -m venv /app/venv
 COPY requirements.txt .
 
@@ -19,7 +21,10 @@ WORKDIR /app
 ENV PYTHONUNBUFFERED=1
 ENV PATH="/venv/bin:$PATH"
 
+# copy application files to WORKDIR (/app)
 COPY linky.py linky.png ./
+# bring in the packages from requirements.txt
 COPY --from=builder /app/venv /venv
 
+# run line for app
 ENTRYPOINT [ "python", "/app/linky.py" ]
