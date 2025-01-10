@@ -1,10 +1,12 @@
 # chainguard-testing
 https://edu.chainguard.dev/chainguard/chainguard-images/getting-started/python/
 
-# venv - Global for both projects in (./venv/)
+## create venv - Global for both projects in (./venv/)
 
 Enable in CMD / Terminal
+
 ```
+python -m venv venv
 venv\scripts\activate.cmd
 ```
 
