@@ -1,3 +1,4 @@
 venv/*
 django5-demo/db.sqlite3
 *.pyc
+django5-demo/venv/*
