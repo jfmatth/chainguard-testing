@@ -1,3 +1,4 @@
+# Chainguard python-dev has UV installed
 FROM cgr.dev/chainguard/python:latest-dev as builder
 
 ENV LANG=C.UTF-8
@@ -15,27 +16,26 @@ WORKDIR /app
 COPY pyproject.toml  .
 RUN uv sync 
 
-# RUN pip install --no-cache-dir -r requirements.txt
 
+# Chainguard Python does not have UV installed, but we don't need it since python is avail
 FROM cgr.dev/chainguard/python:latest
 
 WORKDIR /app
 
 ENV PYTHONUNBUFFERED=1
+# UV put the virutal environment on /app/.venv
 ENV PATH="/app/.venv/bin:$PATH"
 
 # copy application files to WORKDIR (/app)
-COPY main.py ./
-# bring in the packages from requirements.txt
+COPY main.py /app
+
+# bring in the virtual environment / packages from the builder directory
 COPY --from=builder /app/.venv /app
 
 # run line for app
-# ENTRYPOINT [ "python", "/app/linky.py" ]
 ENTRYPOINT [ "python","/app/main.py" ]
 
-
-
-# ----- OLD version
+# ----- OLD python base version
 
 # FROM cgr.dev/chainguard/python:latest-dev as builder
 
