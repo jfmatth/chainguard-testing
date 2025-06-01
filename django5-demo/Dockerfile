@@ -1,3 +1,5 @@
+## Phsae 1 - builder
+
 # Chainguard python-dev has UV installed
 FROM cgr.dev/chainguard/python:latest-dev as builder
 
@@ -17,6 +19,7 @@ COPY pyproject.toml  .
 RUN uv sync 
 
 
+## Phase 2 - execution
 
 # Chainguard python does not have UV installed, but we don't need it since python is avail
 FROM cgr.dev/chainguard/python:latest
@@ -25,18 +28,18 @@ WORKDIR /app
 
 ENV PYTHONUNBUFFERED=1
 # UV put the virutal environment on /app/.venv
-ENV PATH="/app/.venv/bin:/app/.venv/scripts:$PATH"
+ENV PATH="/app/.venv/bin:$PATH"
 
 # bring in the virtual environment / packages from the builder directory
 COPY --from=builder /app/.venv /app
 
 # copy application files to WORKDIR (/app)
 COPY manage.py /app
+COPY start.py /app
 COPY core /app
 
 # run line for app
-ENTRYPOINT [ "waitress-serve"]
-CMD ["--host=0.0.0.0", "--port=80", "core.wsgi:application"]
+ENTRYPOINT [ "python", "start.py"]
 
 # FROM cgr.dev/chainguard/python:latest-dev as builder
 

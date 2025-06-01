@@ -11,3 +11,4 @@ uv sync
 .venv\scripts\activate.ps1
  waitress-serve.exe --host=0.0.0.0 --port=8080 core.wsgi:application
  ```
+
