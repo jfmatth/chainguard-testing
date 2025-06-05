@@ -1,24 +1,27 @@
 # Chainguard python-dev has UV installed
-FROM cgr.dev/chainguard/python:latest-dev as builder
+# FROM cgr.dev/chainguard/python:latest-dev as builder
+FROM python:alpine as builder
 
 ENV LANG=C.UTF-8
 ENV PYTHONDONTWRITEBYTECODE=1
 ENV PYTHONUNBUFFERED=1
 ENV PATH="/app/.venv/bin:$PATH"
 
-USER root
+# USER root
 
 # use /app generic folder
 WORKDIR /app
+
+RUN apk --no-cache add uv
 
 # use python venv to bring in any necessary packages
 # RUN python -m venv /app/venv
 COPY pyproject.toml  .
 RUN uv sync 
 
-
 # Chainguard Python does not have UV installed, but we don't need it since python is avail
-FROM cgr.dev/chainguard/python:latest
+# FROM cgr.dev/chainguard/python:latest
+FROM python:alpine 
 
 WORKDIR /app
 
@@ -30,7 +33,9 @@ ENV PATH="/app/.venv/bin:$PATH"
 COPY main.py /app
 
 # bring in the virtual environment / packages from the builder directory
-COPY --from=builder /app/.venv /app
+COPY --from=builder /app/.venv /app/.venv
+
+# ENV VIRTUAL_ENV="/app/.venv"
 
 # run line for app
 ENTRYPOINT [ "python","/app/main.py" ]
