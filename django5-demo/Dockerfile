@@ -1,75 +1,42 @@
 ## Phsae 1 - builder
 
-# Chainguard python-dev has UV installed
-FROM cgr.dev/chainguard/python:latest-dev as builder
+    # Chainguard python-dev has UV installed
+    FROM cgr.dev/chainguard/python:latest-dev as builder
+    # FROM python:alpine  as builder
 
-ENV LANG=C.UTF-8
-ENV PYTHONDONTWRITEBYTECODE=1
-ENV PYTHONUNBUFFERED=1
-ENV PATH="/app/.venv/bin:$PATH"
+    ENV LANG=C.UTF-8
+    ENV PYTHONDONTWRITEBYTECODE=1
+    ENV PYTHONUNBUFFERED=1
 
-USER root
+    USER root
 
-# use /app generic folder
-WORKDIR /app
+    # RUN apk --no-cache add uv
 
-# use python venv to bring in any necessary packages
-# RUN python -m venv /app/venv
-COPY pyproject.toml  .
-RUN uv sync 
+    # use /app generic folder
+    WORKDIR /app
 
+    # use python venv to bring in any necessary packages
+    # RUN python -m venv /app/venv
+    COPY pyproject.toml  .
+    RUN uv sync 
 
 ## Phase 2 - execution
 
-# Chainguard python does not have UV installed, but we don't need it since python is avail
-FROM cgr.dev/chainguard/python:latest
+    # FROM python:alpine 
+    FROM cgr.dev/chainguard/python
 
-WORKDIR /app
+    WORKDIR /app
 
-ENV PYTHONUNBUFFERED=1
-# UV put the virutal environment on /app/.venv
-ENV PATH="/app/.venv/bin:$PATH"
+    ENV PYTHONUNBUFFERED=1
+    ENV PATH="/app/.venv/bin:$PATH"
 
-# bring in the virtual environment / packages from the builder directory
-COPY --from=builder /app/.venv /app
+    # bring in the virtual environment / packages from the builder directory
+    COPY --from=builder /app/.venv /app/.venv
 
-# copy application files to WORKDIR (/app)
-COPY manage.py /app
-COPY start.py /app
-COPY core /app
+    # copy application files to WORKDIR (/app)
+    COPY manage.py /app
+    COPY start.py /app
+    COPY core/ /app/core
 
-# run line for app
-ENTRYPOINT [ "python", "start.py"]
-
-# FROM cgr.dev/chainguard/python:latest-dev as builder
-
-# ENV LANG=C.UTF-8
-# ENV PYTHONDONTWRITEBYTECODE=1
-# ENV PYTHONUNBUFFERED=1
-# ENV PATH="/app/venv/bin:$PATH"
-
-# # use /app generic folder
-# WORKDIR /app
-
-# # use python venv to bring in any necessary packages
-# RUN python -m venv /app/venv
-# COPY requirements.txt .
-
-# RUN pip install --no-cache-dir -r requirements.txt
-
-# FROM cgr.dev/chainguard/python:latest
-
-# WORKDIR /app
-
-# ENV PYTHONUNBUFFERED=1
-# ENV PATH="/venv/bin:$PATH"
-
-# # copy application files to WORKDIR (/app)
-# COPY .  ./
-# # bring in the packages from requirements.txt
-# COPY --from=builder /app/venv /venv
-
-# # run line for app
-# # ENTRYPOINT [ "python", "manage.py", "runserver" ]
-# ENTRYPOINT ["waitress-serve"]
-# CMD ["--host=0.0.0.0", "--port=80", "core.wsgi:application"]
+    # run line for app
+    ENTRYPOINT [ "python", "start.py"]
