@@ -3,12 +3,25 @@
 ## requirements
 - Uses waitress for serving django versus gunicorn
 
-Waitress is installed as an .EXE on Windows in the .venv/scripts/ folder, so need to add that to Dockerfile path
-
 ## running local (Windows powershell)
 ```
 uv sync
 .venv\scripts\activate.ps1
- waitress-serve.exe --host=0.0.0.0 --port=8080 core.wsgi:application
+start.py
  ```
 
+## start.py
+use this since Windows and Linux have different waitress-serve commands and I wanted to be consistent.
+
+## Dockerfile
+Uses a two-stage build.  
+
+The important part for more Django stuff is the COPY lines, make sure you copy over all Django apps, for example:
+```
+    # copy application files to WORKDIR (/app)
+    COPY manage.py /app
+    COPY start.py /app
+    COPY core/ /app/core
+```
+
+```core``` is the main Django folder with settings, urls, wsgi, etc.  Other app folders must be copied as well
