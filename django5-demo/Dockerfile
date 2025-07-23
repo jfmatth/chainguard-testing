@@ -37,6 +37,7 @@
     COPY manage.py /app
     COPY start.py /app
     COPY core/ /app/core
-
+    COPY app1/ /app/app1
+    
     # run line for app
     ENTRYPOINT [ "python", "start.py"]
