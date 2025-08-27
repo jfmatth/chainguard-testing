@@ -25,8 +25,6 @@
     # FROM python:alpine 
     FROM cgr.dev/chainguard/python
 
-    WORKDIR /app
-
     ENV PYTHONUNBUFFERED=1
     ENV PATH="/app/.venv/bin:$PATH"
 
@@ -34,6 +32,8 @@
     COPY --from=builder /app/.venv /app/.venv
 
     # copy application files to WORKDIR (/app)
+    WORKDIR /app
+
     COPY manage.py /app
     COPY start.py /app
     COPY core/ /app/core
