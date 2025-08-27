@@ -1,10 +1,11 @@
 # Django demo for Chainguard and UV
 
-## requirements
-- Podman on Windows
+## Requirements
+- Podman using WSL
 - Uses waitress for serving django versus gunicorn
+- UV by Astral
 
-## running local (Windows powershell)
+## Running local (Windows powershell)
 ```
 uv sync
 .venv\scripts\activate.ps1
