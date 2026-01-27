@@ -1,23 +1,13 @@
-# chainguard-testing
-https://edu.chainguard.dev/chainguard/chainguard-images/getting-started/python/
+# Chaingguard testing
 
-## create venv - Global for both projects in (./venv/)
+Using the tutorial from Chainguard python, make sure I understand how to use their python-dev and python images for building (in the end) Django docker images.
 
-Enable in CMD / Terminal
+```linky``` and ```octo-facts``` should be mirror images of the tutorial.  ```simple-main``` is my own.
 
-```
-python -m venv venv
-venv\scripts\activate.cmd
-```
+## django5-demo
+A basic django v5.x application with Dockerfile to build a ~90mb Django docker image.
 
-## octo-facts
+## Why
+Chainguard images are some of the smallest and most secure around, and come with most everything.  Also, good learning exercise in two-stage builds, etc.
 
-Doesn't need a requirements.txt but will use the virtual environment for best practice
-
-## Linky
-
-Change the Dockerfile to use a generic app name instead of ```linky``` in the Dockerfile paths
-
-
-
-
+I could have used Alpine, but in the end, Chainguard images are easier and smaller.
